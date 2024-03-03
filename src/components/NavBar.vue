@@ -1,0 +1,78 @@
+<template>
+    <!-- has to be ' ': 'navbar-light bg-light' because JS cant use '-' -->
+    <nav :class="[`navbar-${theme}`, `bg-${theme}`, 'navbar', 'navbar-expand-lg']">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">My Vue</a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li v-for="(page, idx) in pages" class="nav-item" :key="idx">
+                    <navbar-link
+                        :page="page"
+                        :isActive="activePage == idx"
+                        @click.prevent = 'navLinkClick(idx)'
+                    ></navbar-link>
+                </li>
+            </ul>
+            <form action="" class="d-flex">
+                <button 
+                    class="btn btn-primary"
+                    :class="[`btn-${btnTheme}`]"
+                    @click.prevent="changeTheme()"
+                >{{ themeBtnText }}</button>
+            </form>
+        </div>
+    </nav>
+</template>
+
+
+
+<script>
+import NavbarLink from './NavbarLink.vue';
+export default{
+    components:{
+        NavbarLink,
+    },
+    props: ['pages', 'activePage', 'navLinkClick'],
+    data(){
+        return{
+            theme: 'dark',
+            btnTheme: 'light',
+            themeBtnText: 'Light mode'
+        };
+    },
+    created(){
+        this.getThemeSettings()
+    },
+    methods: {
+        changeTheme(){
+            let theme = 'light'
+            let btnTheme = 'dark'
+            let themeBtnTxt = 'Dark mode'
+
+            if(this.theme == 'light'){
+                theme = 'dark'
+                btnTheme = 'light'
+                themeBtnTxt = 'Light mode'
+            }
+
+            this.theme = theme;
+            this.btnTheme = btnTheme;
+            this.themeBtnText = themeBtnTxt;
+            this.storeThemeSettings()
+        },
+        storeThemeSettings(){
+            localStorage.setItem('theme', this.theme);
+            localStorage.setItem('btnTheme', this.btnTheme);
+            localStorage.setItem('themeBtnTxt', this.themeBtnText);
+        },
+        getThemeSettings(){
+            let theme = localStorage.getItem('theme');
+            let btnTheme = localStorage.getItem('btnTheme');
+            let themeBtnText = localStorage.getItem('themeBtnTxt');
+
+            this.theme = theme ? theme : 'dark'
+            this.btnTheme = btnTheme ? btnTheme : 'light'
+            this.themeBtnText = themeBtnText ? themeBtnText : 'Light mode'
+        },
+    },
+}
+</script>

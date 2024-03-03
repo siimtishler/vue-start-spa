@@ -1,0 +1,16 @@
+
+[{
+    "link": {"text": "Home", "url":"index.html"},
+    "pageTitle": "Home page",
+    "content": "Vue.js õppimine 101"
+},
+{
+    "link":{"text": "Register", "url":"register.html"},
+    "pageTitle": "Register page",
+    "content": "Register a user"
+},
+{
+    "link": {"text": "Log in", "url":"login.html"},
+    "pageTitle": "Log in",
+    "content": "Please log in"
+}]
