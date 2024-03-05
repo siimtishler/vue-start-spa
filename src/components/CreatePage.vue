@@ -47,7 +47,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input">
+                        <input type="checkbox" class="form-check-input" v-model="published">
                         <label type="gridCheck1" class="form-check-label">
                             Published
                         </label>
@@ -67,7 +67,23 @@
 
 <script>
 export default {
-    props: ['pageCreated'],
+    emits: {
+        // This helps to validate the events.
+        // If false, Vue warning in console, but page will still be created
+        // Basically for debugging
+        pageCreated({pageTitle, content, link}){
+            if(!pageTitle){
+                return false;
+            }
+            if(!content){
+                return false;
+            }
+            if(!link || !link.text || !link.url){
+                return false;
+            }
+            return true;
+        }
+    },
     computed:{
         isFormInvalid(){
             return !this.pageTitle || !this.content || !this.linkText || !this.linkURL;
@@ -79,6 +95,7 @@ export default {
             content: '',
             linkText: '',
             linkURL: '',
+            published: true,
         }
     },
     methods: {
@@ -87,12 +104,29 @@ export default {
                 alert('Please fill the form')
                 return;
             }
-            this.pageCreated({
+            // Also camelCase here and kebab case in app.vue: @page-created
+            // We are creating a custom event inside submitForm()
+            this.$emit('pageCreated', {
+                link:{
+                    text:this.linkText,
+                    url:this.linkURL,
+                },
                 pageTitle: this.pageTitle,
                 content: this.content,
-                linkText: this.linkText,
-                linkURL: this.linkURL,
+                published: this.published
             });
+
+            this.pageTitle = '';
+            this.content = '';
+            this.linkText = '';
+            this.linkURL = '';
+        }
+    },
+    watch: {
+        pageTitle(newTitle, oldTitle){
+            if(this.linkText === oldTitle){
+                this.linkText = newTitle;
+            }
         }
     }
 }

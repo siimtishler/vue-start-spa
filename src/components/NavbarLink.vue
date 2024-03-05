@@ -1,16 +1,19 @@
 <template>
-    <a
-        class="nav-link"
-        :class="activeClasses"
-        aria-current="page"
-        :href="page.link.url" 
-        :title="`This link goes to ${page.link.text}`"
-    >{{ page.link.text }}</a>
+    <li>
+        <router-link
+            :to="`/${idx}`" 
+            class="nav-link"
+            :class="activeClasses"
+            aria-current="page"
+            :title="`This link goes to ${page.link.text}`"
+        >{{ page.link.text }}</router-link>
+    </li>
+    
 </template>
 
 <script>
 export default{
-    props: ['page', 'isActive'],
+    props: ['page', 'idx', 'isActive'],
     computed: {
         activeClasses(){
             return{

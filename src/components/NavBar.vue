@@ -4,13 +4,21 @@
         <div class="container-fluid">
             <a href="#" class="navbar-brand">My Vue</a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li v-for="(page, idx) in pages" class="nav-item" :key="idx">
-                    <navbar-link
-                        :page="page"
-                        :isActive="activePage == idx"
-                        @click.prevent = 'navLinkClick(idx)'
-                    ></navbar-link>
+                <navbar-link
+                    v-for="(page, idx) in publishedPages" class="nav-item" :key="idx"
+                    :page="page"
+                    :idx="idx"
+                    :isActive="activePage == idx"
+                ></navbar-link>
+
+                <li>
+                    <router-link
+                        :to="`/create`" 
+                        class="nav-link"
+                        aria-current="page"
+                    >Create page</router-link>
                 </li>
+
             </ul>
             <form action="" class="d-flex">
                 <button 
@@ -23,20 +31,25 @@
     </nav>
 </template>
 
-
-
 <script>
 import NavbarLink from './NavbarLink.vue';
+// const count = ref(0);
+
 export default{
     components:{
         NavbarLink,
     },
-    props: ['pages', 'activePage', 'navLinkClick'],
+    computed: {
+        publishedPages() {
+            return this.pages.filter(p => p.published == true)
+        }
+    },
+    props: ['pages', 'activePage'],
     data(){
         return{
             theme: 'dark',
             btnTheme: 'light',
-            themeBtnText: 'Light mode'
+            themeBtnText: 'Light mode',
         };
     },
     created(){

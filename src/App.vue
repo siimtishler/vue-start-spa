@@ -2,18 +2,21 @@
     <navbar
         :pages="pages"
         :active-page="activePage"
-        :nav-link-click="(idx) => activePage = idx" 
     ></navbar>
+
+    <router-view>
+        
+    </router-view>
 
     <!-- :page on binditud componentis page-ga -->
     <!-- <page-viewer 
         v-if="pages.length > 0"
         :page="pages[activePage]"
-    ></page-viewer> -->
+    ></page-viewer>
 
     <create-page
-        :page-created="pageCreated"
-    ></create-page>
+        @page-created="pageCreated"
+    ></create-page> -->
 </template>
 
 <script>
@@ -21,17 +24,21 @@ import PageViewer from './components/PageViewer.vue';
 import Navbar from './components/Navbar.vue';
 import CreatePage from './components/CreatePage.vue';
 
-export default{
+export default {
     components: {
         Navbar,
         PageViewer,
         CreatePage,
     },
-    created(){
+    created() {
         this.getPages()
+
+        this.$eventBus.$on('navbarLinkActivated', (idx) => {
+            this.activePage = idx;
+        });
     },
-    data(){
-        return{
+    data() {
+        return {
             activePage: 0,
             pages: [],
         };
@@ -43,8 +50,8 @@ export default{
 
             this.pages = data;
         },
-        pageCreated(pageObj){
-            console.log(pageObj);
+        pageCreated(pageObj) {
+            this.pages.push(pageObj);
         }
     },
 };

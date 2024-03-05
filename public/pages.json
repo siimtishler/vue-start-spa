@@ -2,15 +2,24 @@
 [{
     "link": {"text": "Home", "url":"index.html"},
     "pageTitle": "Home page",
-    "content": "Vue.js õppimine 101"
+    "content": "Vue.js õppimine 101",
+    "published":true
 },
 {
     "link":{"text": "Register", "url":"register.html"},
     "pageTitle": "Register page",
-    "content": "Register a user"
+    "content": "Register a user",
+    "published":true
 },
 {
     "link": {"text": "Log in", "url":"login.html"},
     "pageTitle": "Log in",
-    "content": "Please log in"
+    "content": "Please log in",
+    "published":true
+},
+{
+    "link":{"text": "Test", "url":"testing.html"},
+    "pageTitle": "Test page",
+    "content": "Testing a page",
+    "published":false
 }]
