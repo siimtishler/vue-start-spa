@@ -39,23 +39,36 @@ export default{
     components:{
         NavbarLink,
     },
-    inject: ['$pages'],
-    computed: {
-        publishedPages() {
-            return this.pages.filter(p => p.published == true)
-        }
-    },
+    inject: ['$pages', '$bus'],
     data(){
         return{
             theme: 'dark',
             btnTheme: 'light',
             themeBtnText: 'Light mode',
-            data: [],
+            pages: [],
         };
     },
     created(){
-        this.getThemeSettings()
+        this.getThemeSettings();
+
         this.pages = this.$pages.getAllPages();
+        
+        this.$bus.$on('page-updated', () => {
+            this.pages = [...this.$pages.getAllPages()];
+        });
+
+        this.$bus.$on('page-created', () => {
+            this.pages = [...this.$pages.getAllPages()];
+        });
+        
+        this.$bus.$on('page-deleted', () => {
+            this.pages = [...this.$pages.getAllPages()];
+        });
+    },
+    computed: {
+        publishedPages() {
+            return this.pages.filter(p => p.published == true)
+        }
     },
     methods: {
         changeTheme(){

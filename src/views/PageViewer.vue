@@ -12,7 +12,6 @@ export default{
     created() {
         let idx = (this.idx == '') ? 0 : this.idx;
         this.page = this.$pages.getSinglePage(idx);
-        console.log(this.page)
     },
     watch: {
         // In watch the "method" or "function" has to be same as a prop

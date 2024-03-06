@@ -9,7 +9,11 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes:[
         // Make PageViewer have optional URL param idx, with '?'
-        { path: '/:idx?', component: PageViewer, props: true },
+        { 
+            path: '/:idx?', 
+            component: PageViewer, 
+            props: true 
+        },
         { 
             path: '/pages', 
             component: Pages, 

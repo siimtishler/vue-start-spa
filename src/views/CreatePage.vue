@@ -34,16 +34,6 @@
                         class="form-control"
                         v-model="linkText"
                         />
-                    </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">
-                            Link URL
-                        </label>
-                        <input 
-                        type="text"
-                        class="form-control"
-                        v-model="linkURL"
-                    />
                 </div>
                 <div class="row mb-3">
                     <div class="form-check">
@@ -65,72 +55,54 @@
     </form>
 </template>
 
-<script>
-export default {
-    emits: {
-        // This helps to validate the events.
-        // If false, Vue warning in console, but page will still be created
-        // Basically for debugging
-        pageCreated({pageTitle, content, link}){
-            if(!pageTitle){
-                return false;
-            }
-            if(!content){
-                return false;
-            }
-            if(!link || !link.text || !link.url){
-                return false;
-            }
-            return true;
-        }
-    },
-    computed:{
-        isFormInvalid(){
-            return !this.pageTitle || !this.content || !this.linkText || !this.linkURL;
-        }
-    },
-    data(){
-        return{
-            pageTitle: '',
-            content: '',
-            linkText: '',
-            linkURL: '',
-            published: true,
-        }
-    },
-    methods: {
-        submitForm(){
-            if(!this.pageTitle || !this.content || !this.linkText || !this.linkURL){
-                alert('Please fill the form')
-                return;
-            }
-            // Also camelCase here and kebab case in app.vue: @page-created
-            // We are creating a custom event inside submitForm()
-            this.$emit('pageCreated', {
-                link:{
-                    text:this.linkText,
-                    url:this.linkURL,
-                },
-                pageTitle: this.pageTitle,
-                content: this.content,
-                published: this.published
-            });
+<script setup>
+import { ref, inject, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-            this.pageTitle = '';
-            this.content = '';
-            this.linkText = '';
-            this.linkURL = '';
-        }
-    },
-    watch: {
-        pageTitle(newTitle, oldTitle){
-            if(this.linkText === oldTitle){
-                this.linkText = newTitle;
-            }
-        }
+const bus = inject('$bus');
+const pages = inject('$pages');
+
+const router = useRouter();
+
+let pageTitle = ref('');
+let content = ref('');
+let linkText = ref('');
+let published = ref(true);
+
+const submitForm = () => {
+    if(!pageTitle || !content || !linkText) {
+        alert('Please fill the form');
+        return;
     }
+    // Also camelCase here and kebab case in app.vue: @page-created
+    // We are creating a custom event inside submitForm()
+
+    let newPage = {
+        link:{
+            text:linkText.value,
+        },
+        pageTitle: pageTitle.value,
+        content: content.value,
+        published: published.value
+    }
+
+    pages.addPage(newPage);
+    
+    bus.$emit('page-created', newPage);
+
+    router.push({path: '/pages'});
 }
+
+const isFormInvalid = computed(() => !pageTitle.value || !content.value || !linkText.value);
+
+watch(pageTitle, (newTitle, oldTitle) => {
+    if(linkText.value === oldTitle){
+        linkText.value = newTitle;
+    }
+});
+
 </script>
+
 
 <style>
     textarea{
