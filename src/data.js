@@ -5,6 +5,7 @@ let pagesStore = JSON.parse(pagesJson);
 
 export default {
     getAllPages() {
+        console.log(pagesStore)
         return pagesStore;
     },
 

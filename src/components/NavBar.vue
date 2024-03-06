@@ -8,15 +8,15 @@
                     v-for="(page, idx) in publishedPages" class="nav-item" :key="idx"
                     :page="page"
                     :idx="idx"
-                    :isActive="activePage == idx"
                 ></navbar-link>
 
                 <li>
                     <router-link
-                        :to="`/create`" 
+                        :to="`/pages`" 
                         class="nav-link"
                         aria-current="page"
-                    >Create page</router-link>
+                        active-class="active"
+                    >Pages</router-link>
                 </li>
 
             </ul>
@@ -39,21 +39,23 @@ export default{
     components:{
         NavbarLink,
     },
+    inject: ['$pages'],
     computed: {
         publishedPages() {
             return this.pages.filter(p => p.published == true)
         }
     },
-    props: ['pages', 'activePage'],
     data(){
         return{
             theme: 'dark',
             btnTheme: 'light',
             themeBtnText: 'Light mode',
+            data: [],
         };
     },
     created(){
         this.getThemeSettings()
+        this.pages = this.$pages.getAllPages();
     },
     methods: {
         changeTheme(){

@@ -8,15 +8,16 @@
 <script>
 export default{
     props: ['idx'],
+    inject: ['$pages'],
     created() {
-        let idx = 0;
-        if(this.$route.params.idx != ''){
-            idx = this.$route.params.idx;
-        }
+        let idx = (this.idx == '') ? 0 : this.idx;
         this.page = this.$pages.getSinglePage(idx);
+        console.log(this.page)
     },
     watch: {
-        idx(newIdx, oldIdx){
+        // In watch the "method" or "function" has to be same as a prop
+        // in this case 'idx'. 
+        idx(newIdx){
             this.page = this.$pages.getSinglePage(newIdx);
         },
     },
